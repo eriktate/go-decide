@@ -39,6 +39,7 @@ func GetLexer() *Lexer {
 
 func (l *Lexer) Lex(target string) []string {
 	var haveSpecial bool
+	var inString bool
 	length := len(target)
 	if length == 0 {
 		return nil
@@ -49,6 +50,26 @@ func (l *Lexer) Lex(target string) []string {
 
 	for i := 0; i < len(target); i++ {
 		log.Printf("Evaluating char: %s", string(target[i]))
+		if string(target[i]) == "\"" {
+			if inString {
+				if isEscaped(target, i) {
+					continue
+				}
+
+				inString = false
+				result[index] = string(target[start : i+1])
+				index++
+				start = i + 1
+				continue
+			}
+			inString = true
+			start = i
+		}
+
+		if inString {
+			continue
+		}
+
 		if isDelim(string(target[i])) {
 			if start != i {
 				log.Printf("Saving word: %s$", string(target[start:i]))
@@ -124,4 +145,11 @@ func isDelim(char string) bool {
 func isScope(char string) bool {
 	_, ok := lexer.Scopes[char]
 	return ok
+}
+
+func isEscaped(source string, index int) bool {
+	if string(source[index-1]) == "\\" {
+		return true
+	}
+	return false
 }

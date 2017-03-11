@@ -25,4 +25,12 @@ func Test_Lex(t *testing.T) {
 	if len(tokens) != 17 {
 		t.Errorf("Lexer pulled incorrect number of tokens: %d", len(tokens))
 	}
+
+	stringTest := "(\"hello\" != \"world\")"
+	tokens = lexer.Lex(stringTest)
+
+	t.Logf("Lexer tokens: %+v", tokens)
+	if len(tokens) != 5 {
+		t.Errorf("Lexer pulled incorrect number of tokens: %d", len(tokens))
+	}
 }
