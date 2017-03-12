@@ -1,7 +1,5 @@
 package decide
 
-import "log"
-
 type Lexer struct {
 	Specials map[string]bool
 	Delims   map[string]bool
@@ -49,7 +47,6 @@ func (l *Lexer) Lex(target string) []string {
 	result := make([]string, length)
 
 	for i := 0; i < len(target); i++ {
-		log.Printf("Evaluating char: %s", string(target[i]))
 		if string(target[i]) == "\"" {
 			if inString {
 				if isEscaped(target, i) {
@@ -72,7 +69,6 @@ func (l *Lexer) Lex(target string) []string {
 
 		if isDelim(string(target[i])) {
 			if start != i {
-				log.Printf("Saving word: %s$", string(target[start:i]))
 				result[index] = string(target[start:i])
 				index++
 			}
@@ -81,14 +77,10 @@ func (l *Lexer) Lex(target string) []string {
 		}
 
 		if isScope(string(target[i])) {
-			log.Println("FOUND PAREN")
-			log.Printf("INDEX IS: %d", index)
 			if start != i {
-				log.Printf("Saving word: %s$", string(target[start:i]))
 				result[index] = string(target[start:i])
 				index++
 			}
-			log.Printf("SAVING PAREN: %s")
 			result[index] = string(target[i])
 			start = i + 1
 			index++
@@ -98,7 +90,6 @@ func (l *Lexer) Lex(target string) []string {
 		if isSpecial(string(target[i])) {
 			if !haveSpecial {
 				if start != i {
-					log.Printf("Saving word: %s$", string(target[start:i]))
 					result[index] = string(target[start:i])
 					start = i
 					index++
@@ -115,7 +106,6 @@ func (l *Lexer) Lex(target string) []string {
 
 		if haveSpecial {
 			if start != i {
-				log.Printf("Saving word: %s$", string(target[start:i]))
 				result[index] = string(target[start:i])
 				start = i
 				index++
