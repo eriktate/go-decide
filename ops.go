@@ -2,7 +2,6 @@ package decide
 
 import (
 	"fmt"
-	"log"
 	"reflect"
 	"regexp"
 )
@@ -72,14 +71,11 @@ func Matches(left, right Expression) bool {
 	var rightPattern string
 	var ok bool
 
-	log.Println("HIT MATCHES")
 	if leftPattern, ok = left.Evaluate().(string); !ok {
-		log.Println("LEFT SIDE NOT STRING")
 		return false
 	}
 
 	if rightPattern, ok = right.Evaluate().(string); !ok {
-		log.Println("RIGHT SIDE NOT STRING")
 		return false
 	}
 
@@ -87,16 +83,13 @@ func Matches(left, right Expression) bool {
 	// Otherwise, if the left side is a regex we test that pattern against the right.
 	r, err := compileRegex(rightPattern)
 	if err != nil {
-		log.Println("RIGHT SIDE NOT REGEX")
 		r, err := compileRegex(leftPattern)
 		if err != nil {
-			log.Println("LEFT SIDE NOT REGEX")
 			// if neither argument is a pattern, test for equality.
 			return Eq(left, right)
 		}
 		return r.Match([]byte(rightPattern))
 	}
-	log.Println("RIGHT SIDE IS REGEX")
 	return r.MatchString(leftPattern)
 }
 
