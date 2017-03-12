@@ -156,3 +156,48 @@ func Test_Lt(t *testing.T) {
 		t.Errorf("Truthy expression resulted in false.")
 	}
 }
+
+func Test_Matches(t *testing.T) {
+	// SETUP FOR SUCCESS
+	t.Log("SETTING UP FOR MATCHES SUCCESS")
+	left := decide.NewPrimitive("this is a test")
+	right := decide.NewPrimitive("/.*(test).*/")
+
+	// TEST FOR SUCCESS
+	t.Log("TESTING MATCHES FOR SUCCESS")
+	result1 := decide.Matches(left, right)
+	result2 := decide.Matches(right, left)
+	result3 := decide.Matches(decide.NewPrimitive("test"), decide.NewPrimitive("test"))
+
+	// ASSERT SUCCESS
+	t.Logf("RESULT1 WAS %t", result1)
+	t.Logf("RESULT2 WAS %t", result2)
+	t.Logf("RESULT3 WAS %t", result3)
+
+	if !result1 {
+		t.Errorf("Truthy expression resulted in false")
+	}
+
+	if !result2 {
+		t.Errorf("Truthy expression resulted in false")
+	}
+
+	if !result3 {
+		t.Errorf("Truthy expression resulted in false")
+	}
+
+	// SETUP FOR FAILURE
+	t.Logf("SETTING UP FOR MATCHES FAILURE")
+	left = decide.NewPrimitive("this is a test")
+	right = decide.NewPrimitive("/.*(not a test).*/")
+
+	// TEST FOR FAILURE
+	t.Log("TESTING MATCHES FOR FAILURE")
+	result := decide.Matches(left, right)
+
+	t.Logf("RESULT WAS %t", result)
+
+	if result {
+		t.Errorf("Falsey expression resulted in true")
+	}
+}

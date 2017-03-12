@@ -1,3 +1,7 @@
 package decide
 
-type Parser struct{}
+type Parser struct {
+	Ops map[string]Operator
+}
+
+var parser *Parser
