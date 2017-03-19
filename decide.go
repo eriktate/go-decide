@@ -43,6 +43,30 @@ func (e *Expr) Evaluate() interface{} {
 	return e.op(e.left, e.right)
 }
 
+func (e *Expr) Op() Operator {
+	return e.op
+}
+
+func (e *Expr) Left() Expression {
+	return e.left
+}
+
+func (e *Expr) Right() Expression {
+	return e.right
+}
+
+func (e *Expr) SetOp(op Operator) {
+	e.op = op
+}
+
+func (e *Expr) SetRight(expr Expression) {
+	e.right = expr
+}
+
+func (e *Expr) SetLeft(expr Expression) {
+	e.left = expr
+}
+
 func (s *StructExpr) Evaluate() interface{} {
 	// Parse out struct name here.
 	head := ""
@@ -67,7 +91,7 @@ func NewPrimitive(val interface{}) *Primitive {
 }
 
 // Decide is meant to kick off a decision using a root Expr.
-func Decide(expr *Expr) bool {
+func Decide(expr Expression) bool {
 	eval := expr.Evaluate()
 	result, ok := eval.(bool)
 	// For now assume that results that aren't bools evaluate to false.
