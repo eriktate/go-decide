@@ -114,6 +114,7 @@ func (l *Lexer) Lex(target string) []string {
 
 		if i == len(target)-1 {
 			result[index] = string(target[start:len(target)])
+			index++
 		}
 		haveSpecial = false
 	}
