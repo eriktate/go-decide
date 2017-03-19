@@ -5,8 +5,11 @@ import (
 	"strconv"
 )
 
+// A Parser can convert DSL tokens into Expressions that can be evaluated. It can be configured with
+// a map of Operators and a slice of TypeParsers that it will use to build Expressions.
 type Parser struct {
-	Ops map[string]Operator
+	Ops         map[string]Operator
+	TypeParsers []TypeParsers
 }
 
 var parser *Parser
@@ -28,6 +31,8 @@ func (p *Parser) Parse(tokens []string) (Expression, error) {
 // It recursively explores a given slice of tokens and returns the resulting expression,
 // index it left off at and any error that may have occurred during the process.
 // TODO: Clean this up. It's pretty hard to follow right now.
+// TODO: Currently requires parens to defined scopes. Should be able to handle chained expressions
+// without addings parens. E.g. 1 < 2 && 4 > 2 && "hello" != "world".
 func (p *Parser) subParse(tokens []string, idx int) (Expression, int, error) {
 	expr := &Expr{}
 
@@ -70,9 +75,12 @@ func (p *Parser) subParse(tokens []string, idx int) (Expression, int, error) {
 		}
 	}
 
+	// TODO: This is an easy check but doesn't feel robust. Need to investigate if this is good enough.
 	if expr.Op() != nil {
 		return expr, len(tokens) - 1, nil
 	}
+	// If the Expr has no Operator then we ended up with a single expression that was assigned to expr.left.
+	// We'll just return that since nil pointers will break the whole expr.
 	return expr.Left(), len(tokens) - 1, nil
 }
 
