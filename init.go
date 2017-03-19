@@ -33,5 +33,7 @@ func init() {
 		">=": Gteq,
 		"<=": Lteq,
 		"~=": Matches,
+		"&&": And,
+		"||": Or,
 	}
 }

@@ -91,7 +91,7 @@ func NewPrimitive(val interface{}) *Primitive {
 }
 
 // Decide is meant to kick off a decision using a root Expr.
-func Decide(expr *Expr) bool {
+func Decide(expr Expression) bool {
 	eval := expr.Evaluate()
 	result, ok := eval.(bool)
 	// For now assume that results that aren't bools evaluate to false.
