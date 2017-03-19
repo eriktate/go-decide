@@ -9,7 +9,7 @@ import (
 func Test_BasicParse(t *testing.T) {
 	// SETUP FOR SUCCESS
 	t.Log("SETTING UP FOR PARSE SUCCESS")
-	ex := "(10 = 10)"
+	ex := "10 = 10"
 	parser := decide.GetParser()
 	lexer := decide.GetLexer()
 
@@ -19,7 +19,7 @@ func Test_BasicParse(t *testing.T) {
 		t.Error(err)
 	}
 
-	if !result {
+	if !decide.Decide(result) {
 		t.Error("Truthy expression resulted in false")
 	}
 }
